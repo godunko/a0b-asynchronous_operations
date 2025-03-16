@@ -17,7 +17,6 @@ is
       Success,   --  Completed successfully
       Failure);  --  Failed
    --  Status of the requested operation.
-   --  It is declared here to make it available for all drivers.
 
    type Transfer_Descriptor is tagged record
       Buffer      : System.Address;
@@ -31,6 +30,9 @@ is
    --  @component Length       Number of bytes in the buffer to be processed
    --  @component Transferred  Number of bytes transferred by the operation
    --  @component State        State of the operation
+   --
+   --  `Buffer` and `Length` components should be setup by the application,
+   --  while `Transferred` and `State` are updated by the operation.
    --
    --  Sometimes, more information is necessary to do operation. Thus, type is
    --  declared as tagged and derived types can be used to extend descriptor
