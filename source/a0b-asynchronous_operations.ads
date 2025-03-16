@@ -21,8 +21,8 @@ is
    type Transfer_Descriptor is tagged record
       Buffer      : System.Address;
       Length      : A0B.Types.Unsigned_32;
-      Transferred : A0B.Types.Unsigned_32;
-      State       : A0B.Asynchronous_Operations.Operation_State;
+      Transferred : A0B.Types.Unsigned_32                       := 0;
+      State       : A0B.Asynchronous_Operations.Operation_State := Active;
    end record;
    --  Descriptor of the data transfer.
    --
