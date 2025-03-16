@@ -18,7 +18,7 @@ is
       Failure);  --  Failed
    --  Status of the requested operation.
 
-   type Transfer_Descriptor is tagged record
+   type Transfer_Descriptor is tagged limited record
       Buffer      : System.Address;
       Length      : A0B.Types.Unsigned_32;
       Transferred : A0B.Types.Unsigned_32                       := 0;
