@@ -12,7 +12,7 @@ package A0B.Asynchronous_Operations
   with Pure
 is
 
-   type Operation_Status is
+   type Operation_State is
      (Active,    --  Active
       Success,   --  Completed successfully
       Failure);  --  Failed
@@ -23,7 +23,7 @@ is
       Buffer      : System.Address;
       Length      : A0B.Types.Unsigned_32;
       Transferred : A0B.Types.Unsigned_32;
-      State       : A0B.Asynchronous_Operations.Operation_Status;
+      State       : A0B.Asynchronous_Operations.Operation_State;
    end record;
    --  Descriptor of the data transfer.
    --
