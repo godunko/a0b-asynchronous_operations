@@ -4,7 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-with System;
+with System.Storage_Elements;
 
 with A0B.Types;
 
@@ -21,8 +21,8 @@ is
 
    type Transfer_Descriptor is tagged limited record
       Buffer      : System.Address;
-      Length      : A0B.Types.Unsigned_32;
-      Transferred : A0B.Types.Unsigned_32                       := 0;
+      Length      : System.Storage_Elements.Storage_Count;
+      Transferred : System.Storage_Elements.Storage_Count       := 0;
       State       : A0B.Asynchronous_Operations.Operation_State := Inactive;
    end record;
    --  Descriptor of the data transfer.
