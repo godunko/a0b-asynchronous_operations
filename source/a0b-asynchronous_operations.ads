@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2025, Vadim Godunko <vgodunko@gmail.com>
+--  Copyright (C) 2025-2026, Vadim Godunko <vgodunko@gmail.com>
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -13,7 +13,8 @@ package A0B.Asynchronous_Operations
 is
 
    type Operation_State is
-     (Active,    --  Active
+     (Inactive,  --  Not active
+      Active,    --  Active
       Success,   --  Completed successfully
       Failure);  --  Failed
    --  Status of the requested operation.
@@ -22,7 +23,7 @@ is
       Buffer      : System.Address;
       Length      : A0B.Types.Unsigned_32;
       Transferred : A0B.Types.Unsigned_32                       := 0;
-      State       : A0B.Asynchronous_Operations.Operation_State := Active;
+      State       : A0B.Asynchronous_Operations.Operation_State := Inactive;
    end record;
    --  Descriptor of the data transfer.
    --
