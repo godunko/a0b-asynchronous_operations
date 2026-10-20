@@ -1,5 +1,5 @@
 name = "a0b_asynchronous_operations"
-version = "0.1.0-dev"
+version = "0.2.0-dev"
 website = "https://github.com/godunko/a0b-asynchronous_operations"
 description = "A0B: Asynchronous Operations"
 long-description = """
