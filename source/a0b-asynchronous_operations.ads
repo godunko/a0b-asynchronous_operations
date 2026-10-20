@@ -39,4 +39,23 @@ is
      array (A0B.Types.Unsigned_32 range <>) of access Transfer_Descriptor;
    --  Sequence of transfer descriptors for massive operations.
 
+   procedure Initialize
+     (Self   : out Transfer_Descriptor;
+      Data   : System.Address;
+      Length : System.Storage_Elements.Storage_Count) with Inline;
+   --  Initialize `Self` to describe a transfer of `Length` bytes starting at
+   --  `Data`. Reset amount of transfered data to zero and state to inactive.
+
+   procedure Set_Success
+     (Self        : in out Transfer_Descriptor;
+      Transferred : System.Storage_Elements.Storage_Count) with Inline;
+   --  Change state to `Success` and set the number of bytes transferred by the
+   --  operation.
+
+   procedure Set_Failure
+     (Self        : in out Transfer_Descriptor;
+      Transferred : System.Storage_Elements.Storage_Count) with Inline;
+   --  Change state to `Failure` and set the number of bytes transferred before
+   --  the failure.
+
 end A0B.Asynchronous_Operations;
