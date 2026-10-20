@@ -4,7 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-package body A0B.Asynchronous_Operations is
+package body A0B.Asynchronous_Transfers is
 
    ----------------
    -- Initialize --
@@ -45,4 +45,4 @@ package body A0B.Asynchronous_Operations is
       Self.State       := Success;
    end Set_Success;
 
-end A0B.Asynchronous_Operations;
+end A0B.Asynchronous_Transfers;

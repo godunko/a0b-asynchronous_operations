@@ -8,7 +8,7 @@ with System.Storage_Elements;
 
 with A0B.Types;
 
-package A0B.Asynchronous_Operations
+package A0B.Asynchronous_Transfers
   with Pure
 is
 
@@ -22,8 +22,8 @@ is
    type Transfer_Descriptor is limited record
       Buffer      : System.Address;
       Length      : System.Storage_Elements.Storage_Count;
-      Transferred : System.Storage_Elements.Storage_Count       := 0;
-      State       : A0B.Asynchronous_Operations.Operation_State := Inactive;
+      Transferred : System.Storage_Elements.Storage_Count := 0;
+      State       : Operation_State                       := Inactive;
    end record;
    --  Descriptor of the data transfer.
    --
@@ -58,4 +58,4 @@ is
    --  Change state to `Failure` and set the number of bytes transferred before
    --  the failure.
 
-end A0B.Asynchronous_Operations;
+end A0B.Asynchronous_Transfers;
