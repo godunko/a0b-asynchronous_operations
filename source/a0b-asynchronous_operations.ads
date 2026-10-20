@@ -39,4 +39,8 @@ is
    --  declared as tagged and derived types can be used to extend descriptor
    --  for particular purpose.
 
+   type Transfer_Descriptor_Array is
+     array (A0B.Types.Unsigned_32 range <>) of access Transfer_Descriptor;
+   --  Sequence of transfer descriptors for massive operations.
+
 end A0B.Asynchronous_Operations;
