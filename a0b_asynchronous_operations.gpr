@@ -1,10 +1,10 @@
 --
---  Copyright (C) 2025, Vadim Godunko <vgodunko@gmail.com>
+--  Copyright (C) 2025-2026, Vadim Godunko <vgodunko@gmail.com>
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-with "../config/a0b_asynchronous_operations_config.gpr";
+with "config/a0b_asynchronous_operations_config.gpr";
 
 with "a0b_common.gpr";
 
@@ -13,7 +13,7 @@ library project A0B_Asynchronous_Operations is
    for Library_Name use "a0b_asynchronous_operations";
    for Library_Dir use "../.libs/" & A0B_Common.Library_Dir_Suffix;
    for Object_Dir use "../.objs/" & A0B_Common.Object_Dir_Suffix;
-   for Source_Dirs use ("../source");
+   for Source_Dirs use ("source");
 
    package Compiler is
       for Switches ("Ada") use A0B_Common.Compiler_Switches_Ada;
