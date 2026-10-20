@@ -19,7 +19,7 @@ is
       Failure);  --  Failed
    --  Status of the requested operation.
 
-   type Transfer_Descriptor is tagged limited record
+   type Transfer_Descriptor is limited record
       Buffer      : System.Address;
       Length      : System.Storage_Elements.Storage_Count;
       Transferred : System.Storage_Elements.Storage_Count       := 0;
@@ -34,10 +34,6 @@ is
    --
    --  `Buffer` and `Length` components should be setup by the application,
    --  while `Transferred` and `State` are updated by the operation.
-   --
-   --  Sometimes, more information is necessary to do operation. Thus, type is
-   --  declared as tagged and derived types can be used to extend descriptor
-   --  for particular purpose.
 
    type Transfer_Descriptor_Array is
      array (A0B.Types.Unsigned_32 range <>) of access Transfer_Descriptor;
