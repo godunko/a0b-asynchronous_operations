@@ -4,7 +4,9 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-package body A0B.Asynchronous_Transfers is
+package body A0B.Asynchronous_Transfers
+  with SPARK_Mode => Off
+is
 
    ----------------
    -- Initialize --

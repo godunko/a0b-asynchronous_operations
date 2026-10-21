@@ -9,8 +9,11 @@ with System.Storage_Elements;
 with A0B.Types;
 
 package A0B.Asynchronous_Transfers
-  with Pure
+  with Pure, SPARK_Mode => Off
 is
+
+   use type System.Address;
+   use type System.Storage_Elements.Storage_Count;
 
    type Operation_State is
      (Inactive,  --  Not active
@@ -35,27 +38,61 @@ is
    --  `Buffer` and `Length` components should be setup by the application,
    --  while `Transferred` and `State` are updated by the operation.
 
+   type Transfer_Descriptor_Access is access all Transfer_Descriptor
+     with Storage_Size => 0;
+
    type Transfer_Descriptor_Array is
-     array (A0B.Types.Unsigned_32 range <>) of access Transfer_Descriptor;
+     array (A0B.Types.Unsigned_32 range <>) of Transfer_Descriptor_Access;
    --  Sequence of transfer descriptors for massive operations.
 
    procedure Initialize
      (Self   : out Transfer_Descriptor;
       Data   : System.Address;
-      Length : System.Storage_Elements.Storage_Count) with Inline;
+      Length : System.Storage_Elements.Storage_Count)
+     with Inline,
+          Global  => null,
+          Depends => (Self => (Data, Length)),
+          Post    => Self.Buffer = Data
+            and then Self.Length = Length
+            and then Self.Transferred = 0
+            and then Self.Transferred <= Self.Length
+            and then Self.State = Inactive;
    --  Initialize `Self` to describe a transfer of `Length` bytes starting at
    --  `Data`. Reset amount of transfered data to zero and state to inactive.
 
    procedure Set_Success
      (Self        : in out Transfer_Descriptor;
-      Transferred : System.Storage_Elements.Storage_Count) with Inline;
+      Transferred : System.Storage_Elements.Storage_Count)
+     with Inline,
+          Global  => null,
+          Depends => (Self => (Self, Transferred)),
+          Pre     => Self.State = Active
+            and then Transferred <= Self.Length,
+          Post    => Self.Buffer = Self.Buffer'Old
+            and then Self.Length = Self.Length'Old
+            and then Self.Transferred = Transferred
+            and then Self.Transferred <= Self.Length
+            and then Self.State = Success;
    --  Change state to `Success` and set the number of bytes transferred by the
    --  operation.
+   --  Requires an active operation and an amount not exceeding `Self.Length`.
+   --  Successful completion may transfer fewer than `Self.Length` bytes.
 
    procedure Set_Failure
      (Self        : in out Transfer_Descriptor;
-      Transferred : System.Storage_Elements.Storage_Count) with Inline;
+      Transferred : System.Storage_Elements.Storage_Count)
+     with Inline,
+          Global  => null,
+          Depends => (Self => (Self, Transferred)),
+          Pre     => Self.State = Active
+            and then Transferred <= Self.Length,
+          Post    => Self.Buffer = Self.Buffer'Old
+            and then Self.Length = Self.Length'Old
+            and then Self.Transferred = Transferred
+            and then Self.Transferred <= Self.Length
+            and then Self.State = Failure;
    --  Change state to `Failure` and set the number of bytes transferred before
    --  the failure.
+   --  Requires an active operation and an amount not exceeding `Self.Length`.
 
 end A0B.Asynchronous_Transfers;
