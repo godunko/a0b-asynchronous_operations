@@ -4,16 +4,17 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-with System.Storage_Elements;
+with System;
 
+with A0B.Storage;
 with A0B.Types;
 
 package A0B.Asynchronous_Transfers
-  with Pure, SPARK_Mode => Off
+  with Preelaborate, SPARK_Mode => On
 is
 
-   use type System.Address;
-   use type System.Storage_Elements.Storage_Count;
+   use type A0B.Storage.Address;
+   use type A0B.Storage.Storage_Offset;
 
    type Operation_State is
      (Inactive,  --  Not active
@@ -23,10 +24,10 @@ is
    --  Status of the requested operation.
 
    type Transfer_Descriptor is limited record
-      Buffer      : System.Address;
-      Length      : System.Storage_Elements.Storage_Count;
-      Transferred : System.Storage_Elements.Storage_Count := 0;
-      State       : Operation_State                       := Inactive;
+      Buffer      : A0B.Storage.Address;
+      Length      : A0B.Storage.Storage_Count;
+      Transferred : A0B.Storage.Storage_Count := 0;
+      State       : Operation_State           := Inactive;
    end record;
    --  Descriptor of the data transfer.
    --
@@ -38,8 +39,7 @@ is
    --  `Buffer` and `Length` components should be setup by the application,
    --  while `Transferred` and `State` are updated by the operation.
 
-   type Transfer_Descriptor_Access is access all Transfer_Descriptor
-     with Storage_Size => 0;
+   type Transfer_Descriptor_Access is access all Transfer_Descriptor;
 
    type Transfer_Descriptor_Array is
      array (A0B.Types.Unsigned_32 range <>) of Transfer_Descriptor_Access;
@@ -48,11 +48,11 @@ is
    procedure Initialize
      (Self   : out Transfer_Descriptor;
       Data   : System.Address;
-      Length : System.Storage_Elements.Storage_Count)
+      Length : A0B.Storage.Storage_Count)
      with Inline,
           Global  => null,
           Depends => (Self => (Data, Length)),
-          Post    => Self.Buffer = Data
+          Post    => Self.Buffer = A0B.Storage.As_Address (Data)
             and then Self.Length = Length
             and then Self.Transferred = 0
             and then Self.Transferred <= Self.Length
@@ -60,9 +60,19 @@ is
    --  Initialize `Self` to describe a transfer of `Length` bytes starting at
    --  `Data`. Reset amount of transfered data to zero and state to inactive.
 
+   procedure Set_Active (Self : in out Transfer_Descriptor)
+     with Inline,
+          Global  => null,
+          Depends => (Self => (Self)),
+          Pre     => Self.State = Inactive,
+          Post    => Self.Buffer = Self.Buffer'Old
+            and then Self.Length = Self.Length'Old
+            and then Self.Transferred = 0
+            and then Self.State = Active;
+
    procedure Set_Success
      (Self        : in out Transfer_Descriptor;
-      Transferred : System.Storage_Elements.Storage_Count)
+      Transferred : A0B.Storage.Storage_Count)
      with Inline,
           Global  => null,
           Depends => (Self => (Self, Transferred)),
@@ -80,7 +90,7 @@ is
 
    procedure Set_Failure
      (Self        : in out Transfer_Descriptor;
-      Transferred : System.Storage_Elements.Storage_Count)
+      Transferred : A0B.Storage.Storage_Count)
      with Inline,
           Global  => null,
           Depends => (Self => (Self, Transferred)),

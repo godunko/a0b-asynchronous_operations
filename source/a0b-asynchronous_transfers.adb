@@ -5,7 +5,7 @@
 --
 
 package body A0B.Asynchronous_Transfers
-  with SPARK_Mode => Off
+  with SPARK_Mode => On
 is
 
    ----------------
@@ -15,13 +15,23 @@ is
    procedure Initialize
      (Self   : out Transfer_Descriptor;
       Data   : System.Address;
-      Length : System.Storage_Elements.Storage_Count) is
+      Length : A0B.Storage.Storage_Count) is
    begin
-      Self.Buffer      := Data;
+      Self.Buffer      := A0B.Storage.As_Address (Data);
       Self.Length      := Length;
       Self.Transferred := 0;
       Self.State       := Inactive;
    end Initialize;
+
+   ----------------
+   -- Set_Active --
+   ----------------
+
+   procedure Set_Active (Self : in out Transfer_Descriptor) is
+   begin
+      Self.Transferred := 0;
+      Self.State       := Active;
+   end Set_Active;
 
    -----------------
    -- Set_Failure --
@@ -29,7 +39,7 @@ is
 
    procedure Set_Failure
      (Self        : in out Transfer_Descriptor;
-      Transferred : System.Storage_Elements.Storage_Count) is
+      Transferred : A0B.Storage.Storage_Count) is
    begin
       Self.Transferred := Transferred;
       Self.State       := Failure;
@@ -41,7 +51,7 @@ is
 
    procedure Set_Success
      (Self        : in out Transfer_Descriptor;
-      Transferred : System.Storage_Elements.Storage_Count) is
+      Transferred : A0B.Storage.Storage_Count) is
    begin
       Self.Transferred := Transferred;
       Self.State       := Success;
